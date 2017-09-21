@@ -2,18 +2,17 @@ package com.example.edry.finalcalllater;
 
 import android.Manifest;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.Toast;
+
 import static com.example.edry.finalcalllater.PowerSaverHelper.prepareIntentForWhiteListingOfBatteryOptimization;
 
 
@@ -35,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main);
 
             checkPopUpPermission();
+            checkDozePermission();
 
 
             // permmisions ! //
@@ -111,12 +111,6 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, permission_list, SEND_SMS_PERMISSIONS_REQUEST);
             }
         }
-
-    public void checkDozePermission() {
-        Intent intent = prepareIntentForWhiteListingOfBatteryOptimization(MainActivity.this, "com.example.edry.finalcalllater", false);
-        if(intent != null)
-            startActivity(intent);
-    }
 
 
     private void requestReadSmsPermission() {
@@ -200,6 +194,12 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
                 }
             }
+        }
+
+        public void checkDozePermission() {
+            Intent intent = prepareIntentForWhiteListingOfBatteryOptimization(MainActivity.this, "com.example.edry.hariscalllater", false);
+            if(intent != null)
+            startActivity(intent);
         }
 
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {

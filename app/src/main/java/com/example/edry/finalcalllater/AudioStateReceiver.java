@@ -4,13 +4,13 @@ import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.icu.util.Calendar;
 import android.media.AudioManager;
 import android.widget.Toast;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static com.example.edry.finalcalllater.GeneralUtils.cancelSleepAlarm;
 
 public class AudioStateReceiver extends BroadcastReceiver {
 
@@ -20,6 +20,7 @@ public class AudioStateReceiver extends BroadcastReceiver {
         System.out.println("Flow: AudioStateReceiver : onReceive  ");
 
         AudioManager MyVolume =  (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+
 
         if(true) {
 
@@ -39,12 +40,15 @@ public class AudioStateReceiver extends BroadcastReceiver {
                      if(isMyServiceRunning(SleepModeService.class,context) && MyVolume.getStreamVolume(AudioManager.STREAM_RING) == 1) {
 
                         StopSleeperWindow Slper = new StopSleeperWindow(context);
+                        cancelSleepAlarm(context);
                      }
 
                     break;
 
                 case AudioManager.RINGER_MODE_VIBRATE:
-
+                    if (!isMyServiceRunning(SleepModeService.class, context)) {
+                        startSleeperWindow Slper = new startSleeperWindow(context);
+                    }
                     break;
 
 

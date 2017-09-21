@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import static com.example.edry.finalcalllater.Constants.ALARM_START_SLEEPER_ID;
+import static com.example.edry.finalcalllater.GeneralUtils.cancelSleepAlarm;
+
 /**
  * Created by edry on 06/09/2017.
  */
@@ -81,19 +84,17 @@ public class startSleeperWindow extends PopUpWindow {
 
                 myContext.startService(newCallOutIntent);
 
-                AlarmManager mgr= (AlarmManager)myContext.getSystemService(Context.ALARM_SERVICE);
+                AlarmManager alarmManager=
+                        (AlarmManager)myContext.getSystemService(Context.ALARM_SERVICE);
 
-                Intent i=new Intent(myContext, StopSleepModeReceiver.class);
+                cancelSleepAlarm(myContext);
 
-                PendingIntent pi= PendingIntent.getBroadcast(myContext, 33, i, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-
-                if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                    mgr.setAndAllowWhileIdle(AlarmManager.RTC, calSet.getTimeInMillis(), pi);
+                Intent i = new Intent(myContext, ExistSleepModeReceiver.class);
+                PendingIntent pi = PendingIntent.getBroadcast(myContext, ALARM_START_SLEEPER_ID, i, PendingIntent.FLAG_UPDATE_CURRENT);
+                if(GeneralUtils.isSDK23())
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calSet.getTimeInMillis(), pi);
                 else
-                    mgr.set(AlarmManager.RTC, calSet.getTimeInMillis(), pi);
-
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calSet.getTimeInMillis(), pi);
 
                 removeView();
 
