@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void checkDozePermission() {
-            Intent intent = prepareIntentForWhiteListingOfBatteryOptimization(MainActivity.this, "com.example.edry.hariscalllater", false);
+            Intent intent = prepareIntentForWhiteListingOfBatteryOptimization(MainActivity.this, "com.example.edry.mixcalllater", false);
             if(intent != null)
             startActivity(intent);
         }
