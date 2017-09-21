@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FrameLayout android:background="@android:color/background_light" android:layout_height="450dp" android:layout_width="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TimePicker android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_gravity="top" android:id="@+id/simpleTimePicker"/>
+
+    <Button android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_gravity="bottom" android:id="@+id/confirmButton" android:text="start" android:layout_marginBottom="40dp"/>
+
+    <Button android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_gravity="bottom" android:id="@+id/ExitButton" android:text="quit"/>
+
+</FrameLayout>

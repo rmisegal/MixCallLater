@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FrameLayout android:background="@android:color/background_light" android:layout_height="250dp" android:layout_width="match_parent" xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Button android:layout_height="wrap_content" android:layout_width="180dp" android:text="yes" android:layout_gravity="bottom" android:id="@+id/ExitButton"/>
+
+    <Button android:layout_height="wrap_content" android:layout_width="181dp" android:text="no" android:layout_gravity="bottom|right" android:id="@+id/KeepRemainingButton"/>
+
+    <TextView android:layout_height="107dp" android:layout_width="match_parent" android:text="Stop Sleeper?" android:id="@+id/StopAppText" android:textSize="36sp" android:gravity="center" android:cursorVisible="true" android:autoText="false" android:layout_marginTop="50dp"/>
+
+</FrameLayout>
