@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.widget.Toast;
 
 public class IncomingSmSReciever extends BroadcastReceiver {
 
@@ -13,6 +14,8 @@ public class IncomingSmSReciever extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         System.out.println("Flow: IncomingSmSReciever : onReceive ") ;
+
+        Toast.makeText(context, "SMS MESSAGE IS RECEIVED", Toast.LENGTH_LONG).show();
 
         Bundle intentExtras = intent.getExtras();
 
