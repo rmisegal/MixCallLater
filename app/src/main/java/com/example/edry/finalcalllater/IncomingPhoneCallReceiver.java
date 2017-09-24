@@ -3,99 +3,67 @@ package com.example.edry.finalcalllater;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.widget.Toast;
 
 public class IncomingPhoneCallReceiver extends BroadcastReceiver {
 
-    private String PhoneState;
+    private static int lastState = TelephonyManager.CALL_STATE_IDLE;
+    private static String savedNumber;  //because the passed incoming is only valid in ringing
 
-    private String adiitionalPhoneNumber;
 
-
+    @Override
     public void onReceive(Context context, Intent intent) {
+        if (intent.getAction().equals("android.intent.action.NEW_OUTGOING_CALL")) {
+            savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
+        }
+        else{
+            String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
+            String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+            int state = 0;
+            if(stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)){
+                state = TelephonyManager.CALL_STATE_IDLE;
+            }
+            else if(stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
+                state = TelephonyManager.CALL_STATE_OFFHOOK;
+            }
+            else if(stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)){
+                state = TelephonyManager.CALL_STATE_RINGING;
+            }
 
-        //System.out.println("Flow: IncomingPhoneCallReceiver : onReceive  ");
 
-        TelephonyManager tmgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        MyPhoneStateListener PhoneListener = new MyPhoneStateListener(context, intent);
-        tmgr.listen(PhoneListener, PhoneStateListener.LISTEN_CALL_STATE);
-
-        //System.out.println("Flow: IncomingPhoneCallReceiver : case " + PhoneState +" " + adiitionalPhoneNumber);
-
+            onCallStateChanged(context, state, number);
+        }
     }
 
-    private int getState( )
-    {
-
-        int state = -1;
-        if(PhoneState.equals("IDLE")){
-            state = TelephonyManager.CALL_STATE_IDLE;
+    public void onCallStateChanged(Context context, int state, String number) {
+        if(lastState == state){
+            //No changes
+            return;
         }
-        else if(PhoneState.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
-            state = TelephonyManager.CALL_STATE_OFFHOOK;
+        switch (state) {
+            case TelephonyManager.CALL_STATE_IDLE:
+                MyPhoneState SoundUp = new MyPhoneState();
+                SoundUp.onCallStateChanged(context,0,null);
+                Toast.makeText(context, "CURRENT STATE: IDLE STATE", Toast.LENGTH_LONG).show();
+                break;
+
+            case TelephonyManager.CALL_STATE_RINGING:
+                Intent newCallInIntent = new Intent(context, OnPhoneCallService.class);
+                newCallInIntent.putExtra("EXTRA_NUMBER", number);
+                newCallInIntent.putExtra("CASE","INCOMING");
+                context.startService(newCallInIntent);
+                Toast.makeText(context, "CURRENT STATE: RINGING STATE", Toast.LENGTH_LONG).show();
+                break;
+
+            case TelephonyManager.CALL_STATE_OFFHOOK:
+                Toast.makeText(context, "CURRENT STATE: OFFHOOK STATE", Toast.LENGTH_LONG).show();
+                break;
+
+            default:
+                Toast.makeText(context, "CURRENT STATE: DEFAULT STATE", Toast.LENGTH_LONG).show();
+                break;
         }
-        else if(PhoneState.equals("RINGING")){
-            state = TelephonyManager.CALL_STATE_RINGING;
-        }
-        return state;
-    };
-
-    private class MyPhoneStateListener extends PhoneStateListener {
-
-        Context context;
-        Intent intent;
-
-        MyPhoneStateListener(Context context, Intent intent) {
-            this.context = context;
-            this.intent = intent;
-        }
-
-        public void onCallStateChanged(int state, String incomingNumber) {
-
-            Log.d("MyPhoneListener",state+"   incoming no:"+incomingNumber);
-
-            PhoneState = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
-
-            adiitionalPhoneNumber = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
-
-            int curState = getState();
-
-            switch (curState) {
-
-                case TelephonyManager.CALL_STATE_IDLE:
-
-                    MyPhoneState SoundUp = new MyPhoneState();
-
-                    SoundUp.onCallStateChanged(context,0,null);
-                    Toast.makeText(context, "CURRENT STATE: IDLE STATE", Toast.LENGTH_LONG).show();
-
-                    break;
-
-                case TelephonyManager.CALL_STATE_RINGING:
-
-                    Intent newCallInIntent = new Intent(context, OnPhoneCallService.class);
-
-                    newCallInIntent.putExtra("EXTRA_NUMBER",adiitionalPhoneNumber);
-
-                    newCallInIntent.putExtra("CASE","INCOMING");
-
-                    context.startService(newCallInIntent);
-
-                    Toast.makeText(context, "CURRENT STATE: RINGING STATE", Toast.LENGTH_LONG).show();
-
-                    break;
-
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                    Toast.makeText(context, "CURRENT STATE: OFFHOOK STATE", Toast.LENGTH_LONG).show();
-                    break;
-
-                default:
-                    Toast.makeText(context, "CURRENT STATE: DEFAULT STATE", Toast.LENGTH_LONG).show();
-                    break;
-            }
-        }
+        lastState = state;
     }
 }

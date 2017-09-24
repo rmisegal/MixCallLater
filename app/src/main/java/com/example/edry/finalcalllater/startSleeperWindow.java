@@ -50,20 +50,22 @@ public class startSleeperWindow extends PopUpWindow {
 
                 Calendar calNow = Calendar.getInstance();
                 Calendar calSet = (Calendar) calNow.clone();
+                if(GeneralUtils.isSDK23()) {
+                    int hoursDiff = timePicker.getHour() - calNow.get(Calendar.HOUR_OF_DAY);
+                    int minuteDiff = timePicker.getMinute() - calNow.get(Calendar.MINUTE);
 
-                int hoursDiff = timePicker.getHour() - calNow.get(Calendar.HOUR_OF_DAY);
-                int minuteDiff = timePicker.getMinute() - calNow.get(Calendar.MINUTE);
+                    calSet.add(Calendar.HOUR_OF_DAY, hoursDiff);
+                    calSet.add(Calendar.MINUTE, minuteDiff);
+                    calSet.add(Calendar.SECOND, -calSet.get(Calendar.SECOND));
+                    calSet.add(Calendar.MILLISECOND, -calSet.get(Calendar.MILLISECOND));
 
-                calSet.add(Calendar.HOUR_OF_DAY, hoursDiff);
-                calSet.add(Calendar.MINUTE, minuteDiff);
-                calSet.add(Calendar.SECOND, -calSet.get(Calendar.SECOND));
-                calSet.add(Calendar.MILLISECOND, -calSet.get(Calendar.MILLISECOND));
-
-                if(calSet.compareTo(calNow) <= 0){
-                    //Today Set time passed, count to tomorrow
-                    calSet.add(Calendar.DATE, 1);
+                    if (calSet.compareTo(calNow) <= 0) {
+                        //Today Set time passed, count to tomorrow
+                        calSet.add(Calendar.DATE, 1);
+                    }
                 }
-
+                else
+                    calSet.add(Calendar.HOUR_OF_DAY, 1);
 
                 Toast.makeText(myContext,"Sleeping for " + getFormatedTimeDifference(calSet.getTimeInMillis()),Toast.LENGTH_LONG).show();
 

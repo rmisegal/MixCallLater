@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.SmsMessage;
+import android.telephony.gsm.SmsMessage;
 import android.widget.Toast;
 
 public class IncomingSmSReciever extends BroadcastReceiver {
@@ -26,14 +26,10 @@ public class IncomingSmSReciever extends BroadcastReceiver {
                 String smsMessageStr = "";
 
                 for (int i = 0; i < sms.length; ++i) {
+                    SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) sms[i]);
+                    String smsBody =  smsMessage.getMessageBody().toString();
 
-                    String format = intentExtras.getString("format");
-
-                    SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) sms[i], format);
-
-                    String smsBody = smsMessage.getMessageBody().toString();
-
-                    String address = smsMessage.getOriginatingAddress();
+                    String address =  smsMessage.getOriginatingAddress();
 
                     smsMessageStr += "SMS From: " + address ;
 

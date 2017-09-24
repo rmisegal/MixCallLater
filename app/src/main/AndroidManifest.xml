@@ -5,12 +5,12 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
@@ -38,6 +38,7 @@
                 <action android:name="android.media.RINGER_MODE_CHANGED" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".OutGoingPhoneCallReceiver"
             android:enabled="true"
@@ -46,6 +47,7 @@
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
         </receiver>
+
         <receiver android:name=".ExistSleepModeReceiver" android:exported="true" />
 
         <service
@@ -54,15 +56,14 @@
             android:exported="true"
             android:priority="1000" />
 
-        <receiver
-            android:name=".IncomingPhoneCallReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:priority="2147483647">
-            <intent-filter android:priority="2147483647">
+        <receiver android:name=".IncomingPhoneCallReceiver" android:exported="true">
+           <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
-            </receiver>
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
 
         <receiver android:name=".IncomingSmSReciever"
             android:enabled="true"

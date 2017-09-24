@@ -50,7 +50,7 @@ public class OnPhoneCallService extends Service {
 
             telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
-            Thread.sleep(300);
+            //Thread.sleep(300);
 
             callStateListener = new PhoneStateListener() {
 
@@ -116,10 +116,9 @@ public class OnPhoneCallService extends Service {
 
                         System.out.println("Flow: step 1" + EXTRA_CODE + "  " + PersonalCode + "  " + EXTRA_CODE.equals(PersonalCode));
 
-                        if(IsEqual(EXTRA_NUMBER,PeerPhoneNumber) && EXTRA_CODE.equals(PersonalCode))
+                        if(EXTRA_NUMBER.equals(PeerPhoneNumber) && EXTRA_CODE.equals(PersonalCode))
                             {
                                 System.out.println("Flow: step 2" );
-
 
                                 MyPhoneState SoundUp = new MyPhoneState();
 
@@ -194,23 +193,4 @@ public class OnPhoneCallService extends Service {
 
         return Code;
     }
-
-    private boolean IsEqual(String p1, String p2)
-    {
-
-        String num1 = p1.substring(p1.length()-6, p1.length()-1);
-
-        String num2 = p2.substring(p2.length()-6, p2.length()-1);
-
-
-        System.out.println("Flow:  num1 " + num1 + " num2 " +num2 + " IsEqual " + num1.equals(num2));
-
-
-
-        return num1.equals(num2);
-
-    }
-
-
-
 }
